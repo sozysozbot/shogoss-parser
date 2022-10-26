@@ -5,7 +5,7 @@ test('usual', () => {
 });
 
 test('no stone', () => {
-    expect(parse_one(`▲７五ポ`)).toEqual({ "piece_phase": { "side": "黒", "to": ["７", "五"], "prof": "ポ" } });
+    expect(parse_one(`☖７五ポ`)).toEqual({ "piece_phase": { "side": "白", "to": ["７", "五"], "prof": "ポ" } });
 });
 
 test('explicit mention of origin', () => {
@@ -44,6 +44,9 @@ test('unparsable promoted profession', () => {
     expect(() => parse_one(`▲58成笑`)).toThrowError(`駒の種類が「成笑」であり「香」「桂」「銀」「金」「成香」「成桂」「成銀」「杏」「圭」「全」「ク」「ル」「ナ」「ビ」「ポ」「歩」「兵」「と」「キ」「王」「超」のどれでもありません`);
 });
 
+test('unparsable start', () => {
+    expect(() => parse_one(`58金打`)).toThrowError("棋譜が「黒」「▲」「☗」「白」「△」「☖」のどれかで始まっていません");
+});
 
 test('unparsable trailing', () => {
     expect(() => parse_one(`▲58金打７四（笑）`)).toThrowError("手「▲58金打７四（笑）」の末尾に解釈不能な「（笑）」があります");
@@ -57,8 +60,28 @@ test('promoted piece', () => {
     expect(parse_one(`▲７五成桂７四`)).toEqual({ "piece_phase": { "side": "黒", "to": ["７", "五"], "prof": "成桂" }, "stone_to": ["７", "四"] });
 });
 
+test('promoted piece2', () => {
+    expect(parse_one(`▲７五全７四`)).toEqual({ "piece_phase": { "side": "黒", "to": ["７", "五"], "prof": "成銀" }, "stone_to": ["７", "四"] });
+});
+
+test('promoted piece3', () => {
+    expect(parse_one(`▲７五杏７四`)).toEqual({ "piece_phase": { "side": "黒", "to": ["７", "五"], "prof": "成香" }, "stone_to": ["７", "四"] });
+});
+
+test('promoted piece4', () => {
+    expect(parse_one(`▲７五と７四`)).toEqual({ "piece_phase": { "side": "黒", "to": ["７", "五"], "prof": "と" }, "stone_to": ["７", "四"] });
+});
+
+test('promoted piece5', () => {
+    expect(parse_one(`▲７五超７四`)).toEqual({ "piece_phase": { "side": "黒", "to": ["７", "五"], "prof": "超" }, "stone_to": ["７", "四"] });
+});
+
 test('not promote a piece', () => {
     expect(parse_one(`▲７三桂不成７四`)).toEqual({ "piece_phase": { "side": "黒", "to": ["７", "三"], "prof": "桂", promotes: false }, "stone_to": ["７", "四"] });
+});
+
+test('promote a piece with explicit origin', () => {
+    expect(parse_one(`▲７三桂(85)成７四`)).toEqual({ "piece_phase": { "side": "黒", "to": ["７", "三"], "prof": "桂", from: ["８", "五"], promotes: true }, "stone_to": ["７", "四"] });
 });
 
 
