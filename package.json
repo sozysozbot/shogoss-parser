@@ -1,8 +1,8 @@
 {
   "name": "shogoss-parser",
-  "version": "0.0.0",
+  "version": "0.0.2",
   "description": "A parser for the game of ShoGoSs",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "test-ci": "jest --ci --coverage",
     "test": "jest",
@@ -39,6 +39,6 @@
     "typescript": "^4.7.3"
   },
   "dependencies": {
-    "shogoss-core": "0.0.2"
+    "shogoss-core": "^0.0.2"
   }
 }
