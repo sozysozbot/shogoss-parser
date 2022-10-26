@@ -79,8 +79,6 @@ export function parse_one(s: string): Move {
     // 1-2: ７五
     // 3: ポ
     // (3-4 if promoted)
-    s = s.trim();
-
     let index = 0;
     const side: Side =
         s[0] === "黒" || s[0] === "▲" || s[0] === "☗" ? "黒" :
@@ -148,5 +146,7 @@ export function parse_one(s: string): Move {
 }
 
 export function parse(s: string): Move[] {
-    throw new Error("not implemented")
+    s = s.replace(/([黒▲☗白△☖])/g, " $1");
+    const moves = s.split(/\s/);
+    return moves.map(s => s.trim()).filter(s => s !== "").map(parse_one);
 }
