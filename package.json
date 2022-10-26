@@ -4,6 +4,7 @@
   "description": "A parser for the game of ShoGoSs",
   "main": "index.js",
   "scripts": {
+    "test-ci": "jest --ci --coverage",
     "test": "jest",
     "test-coverage": "jest --coverage",
     "build": "tsc",
