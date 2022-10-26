@@ -22,7 +22,7 @@ export function parse_coord(s: string): Coordinate {
         } else if (c === "９" || c === "9") {
             return "９";
         } else {
-            throw new Error("棋譜の筋が「１〜９」「1〜9」のどれでもありません");
+            throw new Error(`棋譜の筋（列）が「${c}」であり「１〜９」「1〜9」のどれでもありません`);
         }
     })(s[0]);
 
@@ -46,7 +46,7 @@ export function parse_coord(s: string): Coordinate {
         } else if (c === "９" || c === "9" || c === "九") {
             return "九";
         } else {
-            throw new Error("棋譜の段が「１〜９」「1〜9」「一〜九」のどれでもありません");
+            throw new Error(`棋譜の段（行）が「${c}」であり「１〜９」「1〜9」「一〜九」のどれでもありません`);
         }
     })(s[1]);
 
@@ -70,7 +70,7 @@ export function parse_profession(s: string): Profession {
     else if (s === "キ" || s === "王") return "キ";
     else if (s === "超") return "超";
     else {
-        throw new Error("駒の種類が「香」「桂」「銀」「金」「成香」「成桂」「成銀」「杏」「圭」「全」「ク」「ル」「ナ」「ビ」「ポ」「歩」「兵」「と」「キ」「王」「超」のどれでもありません");
+        throw new Error(`駒の種類が「${s}」であり「香」「桂」「銀」「金」「成香」「成桂」「成銀」「杏」「圭」「全」「ク」「ル」「ナ」「ビ」「ポ」「歩」「兵」「と」「キ」「王」「超」のどれでもありません`);
     }
 }
 
@@ -132,9 +132,13 @@ export function parse_one(s: string): Move {
         if (("1" <= c && c <= "9") || ("１" <= c && c <= "９")) {
             const coord = parse_coord(s.slice(index, index + 2));
             index += 2;
-            return coord;
+            if (!s[index]) {
+                return coord;
+            } else {
+                throw new Error(`手「${s}」の末尾に解釈不能な「${s.slice(index)}」があります`)
+            }
         } else {
-            return null;
+            throw new Error(`手「${s}」の末尾に解釈不能な「${s.slice(index)}」があります`)
         }
     })();
 

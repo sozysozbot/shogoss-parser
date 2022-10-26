@@ -12,12 +12,53 @@ test('explicit mention of origin', () => {
     expect(parse_one(`▲７五ポ(77)７四`)).toEqual({ "piece_phase": { "side": "黒", "to": ["７", "五"], from: ["７", "七"], "prof": "ポ" }, "stone_to": ["７", "四"] });
 });
 
+test('unmatched parenthesis', () => {
+    expect(() => parse_one(`▲７五ポ(77`)).toThrowError("開きカッコと座標の後に閉じカッコがありません");
+});
+
 test('explicit mention of origin', () => {
     expect(parse_one(`▲58金右７四`)).toEqual({ "piece_phase": { "side": "黒", "to": ["５", "八"], from: "右", "prof": "金" }, "stone_to": ["７", "四"] });
 });
 
+test('explicit mention of origin', () => {
+    expect(parse_one(`▲58金左７四`)).toEqual({ "piece_phase": { "side": "黒", "to": ["５", "八"], from: "左", "prof": "金" }, "stone_to": ["７", "四"] });
+});
+
+test('explicit mention of origin', () => {
+    expect(parse_one(`▲58金打７四`)).toEqual({ "piece_phase": { "side": "黒", "to": ["５", "八"], from: "打", "prof": "金" }, "stone_to": ["７", "四"] });
+});
+
+test('unparsable column', () => {
+    expect(() => parse_one(`▲笑`)).toThrowError(`棋譜の筋（列）が「笑」であり「１〜９」「1〜9」のどれでもありません`);
+});
+
+test('unparsable row', () => {
+    expect(() => parse_one(`▲5笑`)).toThrowError(`棋譜の段（行）が「笑」であり「１〜９」「1〜9」「一〜九」のどれでもありません`);
+});
+
+test('unparsable profession', () => {
+    expect(() => parse_one(`▲58笑`)).toThrowError(`駒の種類が「笑」であり「香」「桂」「銀」「金」「成香」「成桂」「成銀」「杏」「圭」「全」「ク」「ル」「ナ」「ビ」「ポ」「歩」「兵」「と」「キ」「王」「超」のどれでもありません`);
+});
+
+test('unparsable promoted profession', () => {
+    expect(() => parse_one(`▲58成笑`)).toThrowError(`駒の種類が「成笑」であり「香」「桂」「銀」「金」「成香」「成桂」「成銀」「杏」「圭」「全」「ク」「ル」「ナ」「ビ」「ポ」「歩」「兵」「と」「キ」「王」「超」のどれでもありません`);
+});
+
+
+test('unparsable trailing', () => {
+    expect(() => parse_one(`▲58金打７四（笑）`)).toThrowError("手「▲58金打７四（笑）」の末尾に解釈不能な「（笑）」があります");
+});
+
+test('unparsable trailing', () => {
+    expect(() => parse_one(`▲58金hsjoihs`)).toThrowError("手「▲58金hsjoihs」の末尾に解釈不能な「hsjoihs」があります");
+});
+
 test('promoted piece', () => {
     expect(parse_one(`▲７五成桂７四`)).toEqual({ "piece_phase": { "side": "黒", "to": ["７", "五"], "prof": "成桂" }, "stone_to": ["７", "四"] });
+});
+
+test('not promote a piece', () => {
+    expect(parse_one(`▲７三桂不成７四`)).toEqual({ "piece_phase": { "side": "黒", "to": ["７", "三"], "prof": "桂", promotes: false }, "stone_to": ["７", "四"] });
 });
 
 
