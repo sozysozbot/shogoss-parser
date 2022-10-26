@@ -1,4 +1,25 @@
-import { parse } from ".";
+import { parse, parse_one } from ".";
+
+test('usual', () => {
+    expect(parse_one(`▲７五ポ７四`)).toEqual({ "piece_phase": { "side": "黒", "to": ["７", "五"], "prof": "ポ" }, "stone_to": ["７", "四"] });
+});
+
+test('no stone', () => {
+    expect(parse_one(`▲７五ポ`)).toEqual({ "piece_phase": { "side": "黒", "to": ["７", "五"], "prof": "ポ" } });
+});
+
+test('explicit mention of origin', () => {
+    expect(parse_one(`▲７五ポ(77)７四`)).toEqual({ "piece_phase": { "side": "黒", "to": ["７", "五"], from: ["７", "七"], "prof": "ポ" }, "stone_to": ["７", "四"] });
+});
+
+test('explicit mention of origin', () => {
+    expect(parse_one(`▲58金右７四`)).toEqual({ "piece_phase": { "side": "黒", "to": ["５", "八"], from: "右", "prof": "金" }, "stone_to": ["７", "四"] });
+});
+
+test('promoted piece', () => {
+    expect(parse_one(`▲７五成桂７四`)).toEqual({ "piece_phase": { "side": "黒", "to": ["７", "五"], "prof": "成桂" }, "stone_to": ["７", "四"] });
+});
+
 
 test('hakomoon_kanbamiyako', () => {
     expect(parse(`▲７五ポ７四 
