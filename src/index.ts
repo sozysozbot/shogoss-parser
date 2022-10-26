@@ -1,5 +1,4 @@
-import { Side, Move, Profession, PiecePhaseMove } from "shogoss-core";
-import { Coordinate, ShogiColumnName, ShogiRowName } from "shogoss-core/dist/coordinate";
+import { Side, Move, Profession, PiecePhaseMove, Coordinate, ShogiColumnName, ShogiRowName } from "shogoss-core";
 
 export function parse_coord(s: string): Coordinate {
     const column: ShogiColumnName = ((c) => {
