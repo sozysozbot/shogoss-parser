@@ -24,5 +24,5 @@
 
 `▲７三桂(85)成７四` → ８五にあった桂馬が、７三に移動して、成った。そしてその後７四に碁石を打った
 
-[src/index.test.ts](https://github.com/sozysozbot/shogoss-parser/blob/main/src/index.test.ts) にもっと具体例がある。
+[src/index.test.ts](https://github.com/shoggoss/shogoss-parser/blob/main/src/index.test.ts) にもっと具体例がある。
 
