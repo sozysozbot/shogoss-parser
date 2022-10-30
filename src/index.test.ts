@@ -1,4 +1,4 @@
-import { parse, parse_one } from ".";
+import { munch_one, parse, parse_one } from ".";
 
 test('usual', () => {
     expect(parse_one(`▲７五ポ７四`)).toEqual({ "piece_phase": { "side": "黒", "to": ["７", "五"], "prof": "ポ" }, "stone_to": ["７", "四"] });
@@ -54,6 +54,10 @@ test('unparsable trailing', () => {
 
 test('unparsable trailing', () => {
     expect(() => parse_one(`▲58金hsjoihs`)).toThrowError("手「▲58金hsjoihs」の末尾に解釈不能な「hsjoihs」があります");
+});
+
+test('unparsable trailing is retained in munch_one', () => {
+    expect(munch_one(`▲58金hsjoihs`)).toEqual({ move: { piece_phase: { side: "黒", to: ["５", "八"], prof: "金" } }, rest: "hsjoihs" });
 });
 
 test('promoted piece', () => {

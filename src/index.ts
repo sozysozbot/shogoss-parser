@@ -74,6 +74,15 @@ export function parse_profession(s: string): Profession {
 }
 
 export function parse_one(s: string): Move {
+    const { move, rest } = munch_one(s);
+    if (rest !== "") {
+        throw new Error(`手「${s}」の末尾に解釈不能な「${rest}」があります`)
+    } else {
+        return move;
+    }
+}
+
+export function munch_one(s: string): { move: Move, rest: string } {
     // 0:   ▲
     // 1-2: ７五
     // 3: ポ
@@ -126,18 +135,18 @@ export function parse_one(s: string): Move {
         } else return null;
     })();
 
-    const stone_to: Coordinate | null = (() => {
-        const c = s[index]; if (!c) return null;
+    const [stone_to, rest]: [Coordinate | null, string] = (() => {
+        const c = s[index]; if (!c) return [null, ""];
         if (("1" <= c && c <= "9") || ("１" <= c && c <= "９")) {
             const coord = parse_coord(s.slice(index, index + 2));
             index += 2;
             if (!s[index]) {
-                return coord;
+                return [coord, ""];
             } else {
-                throw new Error(`手「${s}」の末尾に解釈不能な「${s.slice(index)}」があります`)
+                return [coord, s.slice(index)];
             }
         } else {
-            throw new Error(`手「${s}」の末尾に解釈不能な「${s.slice(index)}」があります`)
+            return [null, s.slice(index)];
         }
     })();
 
@@ -145,7 +154,8 @@ export function parse_one(s: string): Move {
     const piece_phase: PiecePhaseMove =
         promotes !== null ? (from ? { side, to, prof, promotes, from } : { side, to, prof, promotes })
             : (from ? { side, to, prof, from } : { side, to, prof });
-    return stone_to ? { piece_phase, stone_to } : { piece_phase };
+    const move = stone_to ? { piece_phase, stone_to } : { piece_phase };
+    return { move, rest }
 }
 
 export function parse(s: string): Move[] {
